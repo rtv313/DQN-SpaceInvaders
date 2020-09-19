@@ -6,7 +6,7 @@ from epsilon_greedy_strategy import EpsilonGreedyStrategy
 from agent import Agent
 from replay_memory import ReplayMemory,Experience
 
-batch_size = 200
+batch_size = 160
 gamma = 0.999 # Is the discount factor used in the Bellman equation
 eps_start = 1 # Starting value of epsilon
 eps_end = 0.1 # Ending value of epsilon

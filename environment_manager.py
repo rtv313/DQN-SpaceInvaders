@@ -7,7 +7,7 @@ class EnvManager():
         self.done = False
         self.env = gym.make(environment)
         state = self.env.reset()
-        self.resize_shape = (35,35)
+        self.resize_shape = (42,32)
         state = cv2.resize(state,self.resize_shape)
         reshape_dim_one = state.shape[0]
         reshape_dim_two = state.shape[1]
