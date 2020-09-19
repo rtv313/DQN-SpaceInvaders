@@ -7,7 +7,8 @@ class EnvManager():
         self.done = False
         self.env = gym.make(environment)
         state = self.env.reset()
-        state = cv2.resize(state,(40,40))
+        self.resize_shape = (35,35)
+        state = cv2.resize(state,self.resize_shape)
         reshape_dim_one = state.shape[0]
         reshape_dim_two = state.shape[1]
         reshape_dim_three = state.shape[2]
@@ -26,7 +27,7 @@ class EnvManager():
         return self.env.render(mode)
 
     def __process_state(self, state):
-        state = cv2.resize(state,(40,40))
+        state = cv2.resize(state,self.resize_shape)
         processed_image_state = np.reshape(state, [1, self.final_reshape])
         return processed_image_state
 
