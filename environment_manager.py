@@ -1,4 +1,5 @@
 import gym
+import cv2
 import numpy as np
 
 class EnvManager():
@@ -6,7 +7,13 @@ class EnvManager():
         self.done = False
         self.env = gym.make(environment)
         state = self.env.reset()
-        self.current_state = np.reshape(state, [1, self.env.observation_space.shape[0]])
+        reshape_dim_one = self.env.observation_space.shape[0]
+        reshape_dim_two = self.env.observation_space.shape[1]
+        reshape_dim_three = self.env.observation_space.shape[2]
+        self.final_reshape = reshape_dim_one * reshape_dim_two * reshape_dim_three
+        self.input_shape = (self.final_reshape)
+        state_reshaped = np.reshape(state, [1,self.final_reshape])
+        self.current_state = state_reshaped
 
     def reset(self):
         self.env.reset()
@@ -18,7 +25,7 @@ class EnvManager():
         return self.env.render(mode)
 
     def __process_state(self, state):
-        processed_image_state = np.reshape(state,[1,self.env.observation_space.shape[0]])
+        processed_image_state = np.reshape(state, [1, self.final_reshape])
         return processed_image_state
 
     def take_action(self, action):
@@ -39,5 +46,4 @@ class EnvManager():
         return self.current_state
 
     def get_input_shape(self):
-        input_shape = (self.env.observation_space.shape[0])
-        return input_shape
+        return (self.input_shape)

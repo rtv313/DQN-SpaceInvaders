@@ -16,7 +16,7 @@ memory_size = 2000 # Capacity of the replay memory
 lr = 0.001 # Learning rate
 num_episodes = 1000 # Number of episodes we want to play
 
-environment_manager = EnvManager('CartPole-v1')
+environment_manager = EnvManager('SpaceInvaders-v0')
 strategy = EpsilonGreedyStrategy(eps_start, eps_end, eps_decay)
 agent = Agent(strategy, environment_manager.num_actions_available())
 memory = ReplayMemory(memory_size)
@@ -50,8 +50,8 @@ for episode in range(num_episodes):
 
         if memory.can_provide_sample(batch_size):
             experiences_batch = memory.sample(batch_size)
-            states = np.zeros((batch_size,environment_manager.env.observation_space.shape[0]))
-            next_states = np.zeros((batch_size,environment_manager.env.observation_space.shape[0]))
+            states = np.zeros((batch_size,environment_manager.final_reshape))
+            next_states = np.zeros((batch_size,environment_manager.final_reshape))
             actions, rewards = [], []
 
             # Prepare data batch
@@ -73,7 +73,7 @@ for episode in range(num_episodes):
             policy_net.train(states, target_q_values)
 
         if environment_manager.done:
-            print("Episode: " + str(episode) + " Max reward:" + str(steps))
+            print("Episode: " + str(episode) + " Max reward:" + str(max_episode_reward))
             episode_max_rewards.append(max_episode_reward)
             break
     # update target network and save network
