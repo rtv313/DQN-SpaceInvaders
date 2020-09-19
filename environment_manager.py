@@ -7,9 +7,10 @@ class EnvManager():
         self.done = False
         self.env = gym.make(environment)
         state = self.env.reset()
-        reshape_dim_one = self.env.observation_space.shape[0]
-        reshape_dim_two = self.env.observation_space.shape[1]
-        reshape_dim_three = self.env.observation_space.shape[2]
+        state = cv2.resize(state,(40,40))
+        reshape_dim_one = state.shape[0]
+        reshape_dim_two = state.shape[1]
+        reshape_dim_three = state.shape[2]
         self.final_reshape = reshape_dim_one * reshape_dim_two * reshape_dim_three
         self.input_shape = (self.final_reshape)
         state_reshaped = np.reshape(state, [1,self.final_reshape])
@@ -25,6 +26,7 @@ class EnvManager():
         return self.env.render(mode)
 
     def __process_state(self, state):
+        state = cv2.resize(state,(40,40))
         processed_image_state = np.reshape(state, [1, self.final_reshape])
         return processed_image_state
 

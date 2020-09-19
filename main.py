@@ -6,13 +6,13 @@ from epsilon_greedy_strategy import EpsilonGreedyStrategy
 from agent import Agent
 from replay_memory import ReplayMemory,Experience
 
-batch_size = 100
+batch_size = 200
 gamma = 0.999 # Is the discount factor used in the Bellman equation
 eps_start = 1 # Starting value of epsilon
-eps_end = 0.01 # Ending value of epsilon
+eps_end = 0.1 # Ending value of epsilon
 eps_decay = 0.001 # Decay rate we’ll use to decay epsilon over time
 target_update = 10 # How frequently, in terms of episodes, we’ll update the target network weights with the policy network weights.
-memory_size = 2000 # Capacity of the replay memory
+memory_size = 3000 # Capacity of the replay memory
 lr = 0.001 # Learning rate
 num_episodes = 1000 # Number of episodes we want to play
 
