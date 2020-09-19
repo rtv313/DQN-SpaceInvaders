@@ -26,6 +26,7 @@ target_net = DeepQNetwork(input_shape=(environment_manager.get_input_shape(),),
                           action_space=environment_manager.num_actions_available(), batch_size=batch_size)
 
 episode_max_rewards = []
+
 # Episode loop
 for episode in range(num_episodes):
     max_episode_reward = 0
@@ -37,7 +38,7 @@ for episode in range(num_episodes):
     steps = 0
     while not environment_manager.done:
 
-        if reward == True:
+        if render == True:
             environment_manager.render()
 
         action = agent.select_action(state, policy_net)
