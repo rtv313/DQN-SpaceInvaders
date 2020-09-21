@@ -1,5 +1,5 @@
 import tensorflow as tf
-from keras.layers import Input, Dense
+from tensorflow.keras.models import save_model
 
 class DeepQNetwork():
     def __init__(self, input_shape, action_space, batch_size):
@@ -22,5 +22,7 @@ class DeepQNetwork():
     def copy_weights_from_nn(self, neural_network):
         self.model.set_weights(neural_network.model.get_weights())
 
-    def save(self):
-        self.model.save("dqn.h5")
+    def save(self,episode):
+        if episode % 10 == 0:
+            save_model(self.model,'models/'+'ep-'+ str(episode) + '.h5')
+

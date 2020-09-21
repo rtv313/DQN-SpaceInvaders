@@ -5,16 +5,16 @@ from epsilon_greedy_strategy import EpsilonGreedyStrategy
 from agent import Agent
 from replay_memory import ReplayMemory, Experience
 
-render = False
-batch_size = 160
+render = True
+batch_size = 150
 gamma = 0.999  # Is the discount factor used in the Bellman equation
 eps_start = 1  # Starting value of epsilon
-eps_end = 0.1  # Ending value of epsilon
+eps_end = 0.3  # Ending value of epsilon
 eps_decay = 0.001  # Decay rate we’ll use to decay epsilon over time
 target_update = 10  # How frequently, in terms of episodes, we’ll update the target network weights with the policy network weights.
-memory_size = 2000  # Capacity of the replay memory
+memory_size = 150  # Capacity of the replay memory
 lr = 0.001  # Learning rate
-num_episodes = 1000  # Number of episodes we want to play
+num_episodes = 500  # Number of episodes we want to play
 
 environment_manager = EnvManager('SpaceInvaders-v0')
 strategy = EpsilonGreedyStrategy(eps_start, eps_end, eps_decay)
@@ -38,7 +38,7 @@ for episode in range(num_episodes):
     steps = 0
     while not environment_manager.done:
 
-        if render == True:
+        if render:
             environment_manager.render()
 
         action = agent.select_action(state, policy_net)
@@ -83,4 +83,4 @@ for episode in range(num_episodes):
     # update target network and save network
     if episode % target_update == 0:
         target_net.copy_weights_from_nn(policy_net)
-        policy_net.save()
+        policy_net.save(episode)
