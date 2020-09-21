@@ -9,7 +9,7 @@ import tensorflow as tf
 num_episodes = 10
 render = True
 
-dqn  = tf.keras.models.load_model('models/ep-20.h5')
+dqn = tf.keras.models.load_model('models/ep-20.h5')
 environment_manager = EnvManager('SpaceInvaders-v0')
 
 for episode in range(num_episodes):
@@ -17,7 +17,7 @@ for episode in range(num_episodes):
     environment_manager.reset()
     state = environment_manager.get_state()
     environment_manager.done = False
-
+    total_reward = 0
     # Steps loop
     steps = 0
     while not environment_manager.done:
@@ -28,6 +28,9 @@ for episode in range(num_episodes):
         action = np.argmax(dqn.predict(state))
         experience = environment_manager.take_action(action)
         state = experience[0]
-        action = experience[1]
         next_state = experience[2]
         state = next_state
+        reward = experience[3]
+        total_reward += reward
+
+    print('Episode ' + str(episode) + ' Total Reward: ' + str(total_reward))
