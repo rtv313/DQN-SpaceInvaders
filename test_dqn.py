@@ -1,15 +1,11 @@
 import numpy as np
-from deep_q_network import DeepQNetwork
 from environment_manager import EnvManager
-from epsilon_greedy_strategy import EpsilonGreedyStrategy
-from agent import Agent
-from replay_memory import ReplayMemory, Experience
-import tensorflow as tf
+from save_load_module import SaveLoadModule
 
 num_episodes = 10
 render = True
 
-dqn = tf.keras.models.load_model('models/ep-20.h5')
+dqn = SaveLoadModule.load_nn_model(SaveLoadModule.get_most_trained_model())
 environment_manager = EnvManager('SpaceInvaders-v0')
 
 for episode in range(num_episodes):

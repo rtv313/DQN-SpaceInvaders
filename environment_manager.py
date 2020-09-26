@@ -7,7 +7,7 @@ class EnvManager():
         self.done = False
         self.env = gym.make(environment)
         state = self.env.reset()
-        self.resize_shape = (42,32)
+        self.resize_shape = (70,53)
         state = cv2.resize(state,self.resize_shape)
         reshape_dim_one = state.shape[0]
         reshape_dim_two = state.shape[1]
@@ -35,6 +35,7 @@ class EnvManager():
         next_state_before_proccess, reward, done, info = self.env.step(action)
         self.done = done
         next_state = self.__process_state(next_state_before_proccess)
+        next_state = next_state - self.current_state
         experience_tuple = (self.current_state, action, next_state, reward, done, info)
         self.current_state = next_state
         return experience_tuple

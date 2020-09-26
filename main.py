@@ -4,18 +4,19 @@ from environment_manager import EnvManager
 from epsilon_greedy_strategy import EpsilonGreedyStrategy
 from agent import Agent
 from replay_memory import ReplayMemory, Experience
+from save_load_module import SaveLoadModule
 
 render = True
-batch_size = 150
+batch_size = 300
 gamma = 0.999  # Is the discount factor used in the Bellman equation
-eps_start = 1  # Starting value of epsilon
-eps_end = 0.3  # Ending value of epsilon
-eps_decay = 0.001  # Decay rate we’ll use to decay epsilon over time
+eps_start = SaveLoadModule.get_epsilon_start_point() # Starting value of epsilon
+eps_end = 0.2  # Ending value of epsilon
+eps_decay = 0.0001  # Decay rate we’ll use to decay epsilon over time
 target_update = 10  # How frequently, in terms of episodes, we’ll update the target network weights with the policy network weights.
-memory_size = 150  # Capacity of the replay memory
+memory_size = 300  # Capacity of the replay memory
 lr = 0.001  # Learning rate
 num_episodes = 500  # Number of episodes we want to play
-
+last_training_episode = SaveLoadModule.get_most_advanced_episode()
 environment_manager = EnvManager('SpaceInvaders-v0')
 strategy = EpsilonGreedyStrategy(eps_start, eps_end, eps_decay)
 agent = Agent(strategy, environment_manager.num_actions_available())
@@ -25,10 +26,9 @@ policy_net = DeepQNetwork(input_shape=(environment_manager.get_input_shape(),),
 target_net = DeepQNetwork(input_shape=(environment_manager.get_input_shape(),),
                           action_space=environment_manager.num_actions_available(), batch_size=batch_size)
 
-episode_max_rewards = []
-
+max_reward = 0
 # Episode loop
-for episode in range(num_episodes):
+for episode in range(last_training_episode,num_episodes):
     max_episode_reward = 0
     environment_manager.reset()
     state = environment_manager.get_state()
@@ -77,10 +77,11 @@ for episode in range(num_episodes):
             policy_net.train(states, target_q_values)
 
         if environment_manager.done:
-            print("Episode: " + str(episode) + " Max reward:" + str(max_episode_reward))
-            episode_max_rewards.append(max_episode_reward)
+            max_reward = max_reward if max_reward > max_episode_reward else max_episode_reward
+            print("Episode: " + str(episode) + " Episode reward:" + str(max_episode_reward) + "Max Reward: " + str(max_reward) +
+                  " Epsilon value " + str(strategy.get_actual_exploration_rate()))
             break
     # update target network and save network
     if episode % target_update == 0:
         target_net.copy_weights_from_nn(policy_net)
-        policy_net.save(episode)
+        policy_net.save(episode,strategy.get_actual_exploration_rate())
