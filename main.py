@@ -78,7 +78,7 @@ for episode in range(last_training_episode,num_episodes):
 
         if environment_manager.done:
             max_reward = max_reward if max_reward > max_episode_reward else max_episode_reward
-            print("Episode: " + str(episode) + " Episode reward:" + str(max_episode_reward) + " Max Reward: " + str(max_reward) +
+            print("Episode: " + str(episode) + " Episode reward: " + str(max_episode_reward) + " Max Reward: " + str(max_reward) +
                   " Epsilon value " + str(strategy.get_actual_exploration_rate()))
             break
     # update target network and save network
